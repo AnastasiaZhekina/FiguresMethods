@@ -127,7 +127,7 @@ int main() {
 	rec.show3();
 	rec.show();
 
-	Rectangular rec2;
+	Rectangular2 rec2;
 	cout << "Прямоугольный треугольник: " << endl;
 	rec2.show3();
 	rec2.show();
