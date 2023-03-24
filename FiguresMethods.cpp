@@ -1,169 +1,184 @@
 ﻿#include <iostream>
-#include <string>
 using namespace std;
+
 
 class Figure {
 protected:
+	string name = "Фигура";
 	int side = 0;
-	string s = "Правильная";
-public: 
-	Figure (int n, string a): side(n), s(a) {}
-	Figure(){}
-	
-	 virtual void show3() {
-		cout << s << endl << "Количество сторон: " << side << endl;
+public:
+	virtual string gets() { return name; }
+	virtual	int getxside() { return side; }
+	virtual void print_info() {
+		cout  << gets() << endl;
+		if(check(side))
+			cout <<  "Правильная";
+		else cout << "Неправильная";
+		cout << endl << "Количество сторон: " << getxside() << endl << endl;
 	}
-
+	virtual bool check(int a) { if (a == 0)return true; else return false; }
 };
+
 class Triangle : public Figure {
+protected:
 	int a = 10, b = 20, c = 30;
 	int A = 50, B = 60, C = 70;
+	string name = "Треугольник";
+	int side = 3;
 public:
-	Triangle() : Figure( 3, "Правильная") {}
-	Triangle(int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) {
+
+	Triangle(string p_name, int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) : a(p_a), b(p_b), c(p_c), A(p_A), B(p_B), C(p_C), name(p_name) {
 		a = p_a; b = p_b; c = p_c;
 		A = p_A; B = p_B; C = p_C;
+		name = p_name;
 	}
-	
+	string gets() override { return name; }
+	int getxa() { return a; }
+	int getxb() { return b; }
+	int getxc() { return c; }
+	int getxA() { return A; }
+	int getxB() { return B; }
+	int getxC() { return C; }
+	int getxside() override { return side; }
+	Triangle() {}
 
-	void show() {
-		cout << "Стороны: " << "a = " << a << " b = " << b << " c = " << c << endl;
-		cout << "Углы: " << "A = " << A << " B = " << B << " C = " << C << endl << endl;
+	void print_info() override {
+		cout << gets() << endl;
+		if (check(a, b , c, A, B, C))
+			cout << "Правильная";
+		else cout << "Неправильная";
+		cout << endl  << "Количество сторон: " << getxside() << endl;
+		cout << "Стороны: " << "a = " << getxa() << " b = " << getxb() << " c = " << getxc() << endl;
+		cout << "Углы: " << "A = " << getxA() << " B = " << getxB() << " C = " << getxC() << endl << endl;
 	}
+	virtual bool check(int p_a, int p_b, int p_c, int p_A, int p_B, int p_C)  { if (180 == p_A+p_B+p_C)return true; else return false; }
 };
 class Rectangular : public Triangle {
+
 public:
-	Rectangular() :Triangle(10, 20, 30, 50, 60, 90) {
-		side = 3;
-		s = "Неправильный";
-	}
-};
-class Rectangular2 : public Triangle {
-public:
-	Rectangular2() :Triangle(10, 20, 30, 50, 40, 90) {
-		side = 3;
-		s = "Правильная";
-	}
+	Rectangular(string p_name, int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) :Triangle(p_name, p_a, p_b, p_c, p_A, p_B, p_C) {}
+
+	virtual bool check(int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) { if (180 == p_A + p_B + p_C && p_C == 90)return true; else return false; }
+
 };
 class Isosceles : public Triangle {
 public:
-	Isosceles() :Triangle(10, 20, 10, 50, 60, 50) {
-		side = 3;
-			s = "Неправильная";
-	}
+	Isosceles(string p_name, int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) :Triangle(p_name, p_a, p_b, p_c, p_A, p_B, p_C) {}
+		
+virtual bool check(int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) { if (180 == p_A + p_B + p_C && p_a == p_c && p_A == p_C)return true; else return false; }
 };
 class Equilateral : public Triangle {
+
 public:
-	Equilateral() :Triangle(30, 30, 30, 60, 60, 60) {
-		side = 3;
-		s = "Правильная";
-	}
+	Equilateral(string p_name, int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) :Triangle(p_name, p_a, p_b, p_c, p_A, p_B, p_C) {}
+	
+		virtual bool check(int p_a, int p_b, int p_c, int p_A, int p_B, int p_C) { if (180 == p_A + p_B + p_C && p_a == p_b && p_b == p_c && p_A == 60 && p_B == 60 && p_C == 60) return true; else return false; }
 };
 
-class Quadrilateral : public Figure {
+class Quadrilateral :public Figure {
+protected:
 	int a = 10, b = 20, c = 30, d = 40;
 	int A = 50, B = 60, C = 70, D = 80;
+	string name = "Четырёхугольник: ";
+	int side = 4;
 public:
-	Quadrilateral(): Figure (4, "Неправильная") {}
-	Quadrilateral(int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) {
+	Quadrilateral(string p_name, int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) {
 		a = p_a; b = p_b; c = p_c; d = p_d;
 		A = p_A; B = p_B; C = p_C; D = p_D;
+		name = p_name;
 	}
-	
+	Quadrilateral() {}
 
-	void show2() {
-		
-		cout << "Стороны: " << "a = " << a << " b = " << b << " c = " << c << " d = " << d << endl;
-		cout << "Углы: " << "A = " << A << " B = " << B << " C = " << C << " D = " << D << endl << endl;
-		;
+	string gets() override { return name; }
+	int getxa() { return a; }
+	int getxb() { return b; }
+	int getxc() { return c; }
+	int getxd() { return d; }
+	int getxA() { return A; }
+	int getxB() { return B; }
+	int getxC() { return C; }
+	int getxD() { return D; }
+	int getxside() override { return side; }
+	void print_info() override {
+		cout << gets() << endl;
+		if (check(a, b, c, d, A, B, C, D))
+			cout << "Правильная";
+		else cout << "Неправильная";
+		cout << endl << "Количество сторон: " << getxside() << endl;
+		cout << "Стороны: " << "a = " << getxa() << " b = " << getxb() << " c = " << getxc() << " d = " << getxd() << endl;
+		cout << "Углы: " << "A = " << getxA() << " B = " << getxB() << " C = " << getxC() << " D = " << getxD() << endl << endl;
 	}
+	virtual bool check(int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) 
+	{ if (360 == p_A + p_B + p_C + p_D)return true; else return false; }
 };
-class Rectangle :  public  Quadrilateral {
+
+class Rectangle : public  Quadrilateral {
 public:
-	
-	Rectangle() : Quadrilateral(10, 20, 10, 20, 90, 90, 90, 90) {
-		side = 4;
-		s = "Правильная";
-	}
+	Rectangle(string p_name, int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) : Quadrilateral(p_name, p_a, p_b, p_c, p_d, p_A, p_B, p_C, p_D) {}
+virtual bool check(int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D)
+	{ if (360 == p_A + p_B + p_C + p_D && p_a == p_c && p_b == p_d && p_A == 90 && p_B == 90 && p_C == 90 && p_D == 90) return true; else return false; }
 };
+
 class Square : public  Quadrilateral {
 public:
-	Square() : Quadrilateral(20, 20, 20, 20, 90, 90, 90, 90) {
-		side = 4;
-		s = "Правильная";
-	}
+	Square(string p_name, int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) : Quadrilateral(p_name, p_a, p_b, p_c, p_d, p_A, p_B, p_C, p_D) {}
+virtual	bool check(int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) 
+	{ if (360 == p_A + p_B + p_C + p_D && p_a == p_c && p_c == p_b && p_b == p_d && p_d == p_a && p_A == 90 && p_B == 90 && p_C == 90 && p_D == 90)return true; else return false; }
 };
+
 class Parallelogram : public  Quadrilateral {
 public:
-	Parallelogram() : Quadrilateral(20, 30, 20, 30, 30, 40, 30, 40) {
-		side = 4;
-		s = "Неправильная";
-	}
+	Parallelogram(string p_name, int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) : Quadrilateral(p_name, p_a, p_b, p_c, p_d, p_A, p_B, p_C, p_D) {}
+	virtual bool check(int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) 
+	{ if (360 == p_A + p_B + p_C + p_D && p_a == p_c && p_b == p_d && p_A == p_C && p_B == p_D)return true; else return false; }
 };
+
 class Rhombus : public  Quadrilateral {
 public:
-	Rhombus() : Quadrilateral(30, 30, 30, 30, 30, 40, 30, 40) {
-		side = 4;
-		s = "Неправильная";
-	}
+	Rhombus(string p_name, int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D) : Quadrilateral(p_name, p_a, p_b, p_c, p_d, p_A, p_B, p_C, p_D) {}
+	virtual bool check(int p_a, int p_b, int p_c, int p_d, int p_A, int p_B, int p_C, int p_D)
+	{if (360 == p_A + p_B + p_C + p_D && p_a == p_c && p_c == p_b && p_b == p_d && p_d == p_a && p_A == p_C && p_B == p_D)return true; else return false;}
 };
+
 int main() {
 
 	setlocale(LC_ALL, "Russian");
-	
-	Figure fig;
-	cout << "Фигура: " << endl;
-	fig.show3();
 
-	cout << endl;
+	Figure* gi = new Figure;
+	gi->print_info();
 
-	Triangle tri;
-	cout << "Треугольник: " << endl;
-	tri.show3();
-	tri.show();
+	Figure* tri = new Triangle("Треугольник", 10, 20, 30, 50, 60, 70);
+	tri->print_info();
 
-	Rectangular rec;
-	cout << "Прямоугольный треугольник: " << endl;
-	rec.show3();
-	rec.show();
+	Figure* rec = new Rectangular("Прямоугольный треугольник:", 10, 20, 10, 50, 60, 90);
+	rec->print_info();
 
-	Rectangular rec2;
-	cout << "Прямоугольный треугольник: " << endl;
-	rec2.show3();
-	rec2.show();
+	Figure* iso = new Isosceles("Равнобедренный треугольник: ", 10, 20, 10, 50, 60, 50);
+	iso->print_info();
 
-	Isosceles iso;
-	cout << "Равнобедренный треугольник: " << endl;
-	iso.show3();
-	iso.show();
+	Figure* equ = new Equilateral("Равносторонний треугольник: ", 30, 30, 30, 60, 60, 60);
+	equ->print_info();
 
-	Equilateral equ;
-	cout << "Равносторонний треугольник: " << endl;
-	equ.show3();
-	equ.show();
+	Figure* qua = new Quadrilateral("Четырёхугольник: ", 10, 20, 30, 40, 50, 60, 70, 80);
+	qua->print_info();
 
-	Quadrilateral qua;
-	cout << "Четырёхугольник: " << endl;
-	qua.show3();
-	qua.show2();
+	Figure* rect = new Rectangle("Прямоугольник: ", 10, 20, 10, 20, 90, 90, 90, 90);
+	rect->print_info();
 
-	Rectangle rect;
-	cout << "Прямоугольник: " << endl;
-	rect.show3();
-	rect.show2();
+	Figure* squ = new Square("Квадрат: ", 20, 20, 20, 20, 90, 90, 90, 90);
+	squ->print_info();
 
-	Square squ;
-	cout << "Квадрат: " << endl;
-	squ.show3();
-	squ.show2();
+	Figure* par = new Parallelogram("Параллелограмм: ", 20, 30, 20, 30, 30, 40, 30, 40);
+	par->print_info();
 
-	Parallelogram par;
-	cout << "Параллелограмм: " << endl;
-	par.show3();
-	par.show2();
+	Figure* rho = new Rhombus("Ромб: ", 30, 30, 30, 30, 30, 40, 30, 40);
+	rho->print_info();
 
-	Rhombus rho;
-	cout << "Ромб: " << endl;
-	rho.show3();
-	rho.show2();
+	delete rec;
+	delete iso;
+	delete equ;
+	delete qua;
+	delete rect;
+	delete par;
+	delete rho;
 };
